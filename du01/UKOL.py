@@ -45,7 +45,6 @@ def get_ego_network(ego, lang='en'):
             if lp.title() in lp_titles_dict:
                 if check_link(ego, lp.title()):
                     G.add_edge(node,lp.title())
-
     return G
 
 
