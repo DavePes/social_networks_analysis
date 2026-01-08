@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 
-# --- 1. Load the Data ---
+# Load the Data ---
 print("--- [1] Loading Data ---")
 try:
     df = pd.read_csv("email-EuAll.txt", sep='\t', comment='#', names=['FromNodeId', 'ToNodeId'])
@@ -13,7 +13,7 @@ except FileNotFoundError:
     print("Error: 'email-EuAll.txt' not found.")
     exit()
 
-# --- 2. Top 10 Senders vs Top 10 Receivers ---
+# Top 10 Senders vs Top 10 Receivers ---
 print("\n--- [2] Analyzing Top Senders and Receivers ---")
 
 # Get Top 10 Senders (Out-Degree)
@@ -45,7 +45,7 @@ plt.tight_layout()
 plt.savefig('senders_vs_receivers.png')
 print("Saved 'senders_vs_receivers.png'")
 
-# --- 3. PageRank (Influence Analysis) ---
+# PageRank (Influence Analysis) ---
 print("\n--- [3] Calculating PageRank ---")
 pagerank = nx.pagerank(G, alpha=0.85)
 top_10_pr = sorted(pagerank.items(), key=lambda x: x[1], reverse=True)[:10]
@@ -67,7 +67,7 @@ print("Top 10 Influencers by PageRank:")
 for node, score in top_10_pr:
     print(f"  Node {node}: Score {score:.5f}")
 
-# --- 4. Community Detection (Explanation below) ---
+# Community Detection (Explanation below) ---
 print("\n--- [4] Detecting Communities ---")
 G_undirected = G.to_undirected()
 communities = list(nx.community.label_propagation_communities(G_undirected))
@@ -87,18 +87,18 @@ plt.ylabel('Number of Members')
 plt.savefig('communities.png')
 print("Saved 'communities.png'")
 
-# --- 5. Resilience Test ---
-print("\n--- [5] Simulation: Removing Top Sender ---")
-hub_node = top_10_senders[0][0]
-initial_scc = len(max(nx.strongly_connected_components(G), key=len))
+# Resilience Test ---
+# print("\n--- [5] Simulation: Removing Top Sender ---")
+# hub_node = top_10_senders[0][0]
+# initial_scc = len(max(nx.strongly_connected_components(G), key=len))
 
-G_attacked = G.copy()
-G_attacked.remove_node(hub_node)
-new_scc = len(max(nx.strongly_connected_components(G_attacked), key=len))
+# G_attacked = G.copy()
+# G_attacked.remove_node(hub_node)
+# new_scc = len(max(nx.strongly_connected_components(G_attacked), key=len))
 
-print(f"Removed Top Sender (Node {hub_node})")
-print(f"Initial Core Size: {initial_scc}")
-print(f"New Core Size: {new_scc}")
-print(f"Change: {initial_scc - new_scc} nodes")
+# print(f"Removed Top Sender (Node {hub_node})")
+# print(f"Initial Core Size: {initial_scc}")
+# print(f"New Core Size: {new_scc}")
+# print(f"Change: {initial_scc - new_scc} nodes")
 
 print("\nAnalysis Complete.")
